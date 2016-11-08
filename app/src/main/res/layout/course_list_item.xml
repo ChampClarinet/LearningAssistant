@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/course"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="course"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/learn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/course"
+        android:layout_marginTop="11dp"
+        android:text="learn" />
+
+    <TextView
+        android:id="@+id/learntime"
+        android:layout_width="wrap_content"
+        android:layout_below="@+id/course"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="11dp"
+        android:layout_toRightOf="@+id/learn"
+        android:text="learnTime"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/learn"
+        android:layout_marginTop="11dp"
+        android:text="learn" />
+
+    <TextView
+        android:id="@+id/testtime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/learntime"
+        android:layout_marginLeft="11dp"
+        android:layout_marginTop="11dp"
+        android:layout_toRightOf="@+id/test"
+        android:text="testTime" />
+
+    <TextView
+        android:id="@+id/desc"
+        android:layout_width="150dp"
+        android:layout_height="70dp"
+        android:layout_alignBottom="@+id/testtime"
+        android:layout_toEndOf="@+id/learntime"
+        android:gravity="center"
+        android:text="description" />
+
+</RelativeLayout>
