@@ -3,6 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_add_course"
-        android:title="@string/save"
+        android:title="@string/saveButton"
         app:showAsAction="always"/>
 </menu>

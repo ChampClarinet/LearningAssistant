@@ -20,4 +20,12 @@ public class Time {
         return h + ":" + m;
     }
 
+    public static String extractHour(String time){
+        return time.substring(0,2);
+    }
+
+    public static String extractMinute(String time){
+        return time.substring(3);
+    }
+
 }

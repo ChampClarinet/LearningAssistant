@@ -23,6 +23,6 @@
     <string name="day">วัน</string>
     <string name="yesButton">ตกลง</string>
     <string name="to">ถึง</string>
-    <string name="save">บันทึก</string>
+    <string name="saveButton">บันทึก</string>
     <string name="from">ตั้งแต่</string>
 </resources>

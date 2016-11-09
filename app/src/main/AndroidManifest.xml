@@ -28,6 +28,9 @@
         <activity
             android:name=".CourseList"
             android:label="@string/courses"></activity>
+        <activity
+            android:name=".EditCourseActivity"
+            android:label="@string/courseEdit"></activity>
     </application>
 
 </manifest>

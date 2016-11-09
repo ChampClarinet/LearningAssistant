@@ -24,15 +24,16 @@ import com.example.clarinetmaster.learningassistant.DB.dbHelper;
 import com.example.clarinetmaster.learningassistant.Info.Time;
 import com.example.clarinetmaster.learningassistant.Info.uncompleteFieldAlert;
 import com.example.clarinetmaster.learningassistant.Info.weekday;
+import com.example.clarinetmaster.learningassistant.Model.Course;
 
 import java.util.ArrayList;
 
 import static com.example.clarinetmaster.learningassistant.Info.Time.HOUR;
 import static com.example.clarinetmaster.learningassistant.Info.Time.MINUTE;
 
-public class AddCourseActivity extends AppCompatActivity {
+public class EditCourseActivity extends AppCompatActivity {
 
-    private static final String TAG = "ADD_COURSE_ACTIVITY";
+    private static final String TAG = "EDIT_COURSE_ACTIVITY";
 
     private ContentValues cv;
 
@@ -62,6 +63,8 @@ public class AddCourseActivity extends AppCompatActivity {
 
     private dbHelper mHelper;
     private SQLiteDatabase db;
+    private Bundle extras;
+    private int targetID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +74,52 @@ public class AddCourseActivity extends AppCompatActivity {
         mHelper = new dbHelper(this);
         db = mHelper.getWritableDatabase();
 
+        extras = getIntent().getExtras();
+
         findViewByIDs();
         setAdapter();
         setListener();
+        getOldData();
 
     }
 
-    private void findViewByIDs(){
+    private void getOldData(){
+
+        targetID = extras.getInt("targetID");
+
+        Course oldCourse = mHelper.selectCourseById(db, targetID);
+
+        newCourseName.setText(oldCourse.getCourseName());
+
+        learnDaySpinner.setSelection(oldCourse.getCourseDayIndex());
+        testDaySpinner.setSelection(oldCourse.getTestDayIndex());
+
+        String time = oldCourse.getLearnStart();
+        Log.i(TAG, "LS = "+time);
+        startLHourSpinner.setSelection(Integer.parseInt(Time.extractHour(time)));
+        startLMinSpinner.setSelection(Integer.parseInt(Time.extractMinute(time)));
+        Log.i(TAG, ""+Integer.parseInt(Time.extractHour(time))+" "+Integer.parseInt(Time.extractMinute(time)));
+
+        time = oldCourse.getLearnFinish();
+        Log.i(TAG, "LF = "+time);
+        finishLHourSpinner.setSelection(Integer.parseInt(Time.extractHour(time)));
+        finishLMinSpinner.setSelection(Integer.parseInt(Time.extractMinute(time)));
+        Log.i(TAG, ""+Integer.parseInt(Time.extractHour(time))+" "+Integer.parseInt(Time.extractMinute(time)));
+
+        time = oldCourse.getTestStart();
+        Log.i(TAG, "TS = "+time);
+        startTHourSpinner.setSelection(Integer.parseInt(Time.extractHour(time)));
+        startTMinSpinner.setSelection(Integer.parseInt(Time.extractMinute(time)));
+        Log.i(TAG, ""+Integer.parseInt(Time.extractHour(time))+" "+Integer.parseInt(Time.extractMinute(time)));
+
+        time = oldCourse.getTestFinish();
+        Log.i(TAG, "TF = "+time);
+        finishTHourSpinner.setSelection(Integer.parseInt(Time.extractHour(time)));
+        finishTMinSpinner.setSelection(Integer.parseInt(Time.extractMinute(time)));
+        Log.i(TAG, ""+Integer.parseInt(Time.extractHour(time))+" "+Integer.parseInt(Time.extractMinute(time)));
+    }
+
+    private void findViewByIDs() {
         newCourseName = (EditText) findViewById(R.id.newCourseName);
         learnDaySpinner = (Spinner) findViewById(R.id.learnDaySpinner);
         testDaySpinner = (Spinner) findViewById(R.id.testDaySpinner);
@@ -253,47 +295,32 @@ public class AddCourseActivity extends AppCompatActivity {
 
     }
 
-    private void setAdapter(){
+    private void setAdapter() {
         ArrayAdapter<String> adapterD = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, day());
         ArrayAdapter<String> adapterH = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, HOUR());
         ArrayAdapter<String> adapterM = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, MINUTE());
 
         learnDaySpinner.setAdapter(adapterD);
-        learnDaySpinner.setSelection(0);
-
         testDaySpinner.setAdapter(adapterD);
-        testDaySpinner.setSelection(0);
 
         startLHourSpinner.setAdapter(adapterH);
-        startLHourSpinner.setSelection(0);
-
         startLMinSpinner.setAdapter(adapterM);
-        startLMinSpinner.setSelection(0);
 
         finishLHourSpinner.setAdapter(adapterH);
-        finishLHourSpinner.setSelection(0);
-
         finishLMinSpinner.setAdapter(adapterM);
-        finishLMinSpinner.setSelection(0);
 
         startTHourSpinner.setAdapter(adapterH);
-        startTHourSpinner.setSelection(0);
-
         startTMinSpinner.setAdapter(adapterM);
-        startTMinSpinner.setSelection(0);
 
         finishTHourSpinner.setAdapter(adapterH);
-        finishTHourSpinner.setSelection(0);
-
         finishTMinSpinner.setAdapter(adapterM);
-        finishTMinSpinner.setSelection(0);
 
     }
 
-    private void addToDB(){
-        db.insert(dbHelper.TBLCOURSE, null, cv);
-        Log.i(TAG, cv.getAsString(dbHelper.COLCOURSENAME)+" inserted");
-        String msg = "\""+cv.getAsString(dbHelper.COLCOURSENAME)+"\""+" "+getResources().getString(R.string.added);
+    private void update() {
+        db.update(dbHelper.TBLCOURSE, cv, dbHelper.COLID+" = "+targetID, null);
+        Log.i(TAG, "updated");
+        String msg = "\""+cv.getAsString(dbHelper.COLCOURSENAME)+"\""+" "+getResources().getString(R.string.updated);
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         finish();
     }
@@ -311,7 +338,7 @@ public class AddCourseActivity extends AppCompatActivity {
 
         if (id == R.id.action_add_course) {
             Log.i(TAG, "save menu triggered");
-            if(encapData()) confirmation();
+            if (encapData()) confirmation();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -321,22 +348,22 @@ public class AddCourseActivity extends AppCompatActivity {
         Log.i(TAG, "encapsulating");
         String courseName = newCourseName.getText().toString();
         Log.i("courseNameLength", Integer.toString(courseName.length()));
-        if(courseName.length() == 0) {
+        if (courseName.length() == 0) {
             new uncompleteFieldAlert(this).alert();
             return false;
         }
         String courseDescS = courseDesc.getText().toString();
-        if(courseDescS.length() == 0) courseDescS = null;
+        if (courseDescS.length() == 0) courseDescS = null;
         String learnS = Time.timeJoiner(courseStartH, courseStartM);
         String learnF = Time.timeJoiner(courseFinishH, courseFinishM);
         String testS = Time.timeJoiner(testStartH, testStartM);
         String testF = Time.timeJoiner(testFinishH, testFinishM);
 
-        Log.i(TAG, courseName+"\n"+
-                courseDay+"\n"+
-                learnS+" "+learnF+"\n"+
-                testDay+"\n"+
-                testS+" "+testF+"\n"+
+        Log.i(TAG, courseName + "\n" +
+                courseDay + "\n" +
+                learnS + " " + learnF + "\n" +
+                testDay + "\n" +
+                testS + " " + testF + "\n" +
                 courseDescS
         );
 
@@ -357,12 +384,12 @@ public class AddCourseActivity extends AppCompatActivity {
         Log.i(TAG, "confirmMethod");
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.confirm);
-        dialog.setMessage(getResources().getString(R.string.conMessage)+"\n"+printData());
+        dialog.setMessage(getResources().getString(R.string.conMessage) + "\n" + printData());
         dialog.setPositiveButton(R.string.yesButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.i(TAG, "PositiveDialogButton triggered");
-                addToDB();
+                update();
                 dialog.dismiss();
             }
         });
@@ -386,9 +413,9 @@ public class AddCourseActivity extends AppCompatActivity {
         return s;
     }
 
-    private ArrayList<String> day(){
+    private ArrayList<String> day() {
         ArrayList<String> s = new ArrayList<>();
-        for(int x: weekday.getArrayWeekDay()) s.add(getResources().getString(x));
+        for (int x : weekday.getArrayWeekDay()) s.add(getResources().getString(x));
         return s;
     }
 

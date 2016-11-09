@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.clarinetmaster.learningassistant.Info.weekday;
 import com.example.clarinetmaster.learningassistant.Model.Course;
 import com.example.clarinetmaster.learningassistant.R;
 
@@ -47,13 +48,13 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         String cName = course.getCourseName();
         courseName.setText(cName);
 
-        String l = course.getCourseDay();
+        int l = weekday.getDayCodeByDayIndex(course.getCourseDayIndex());
         learn.setText(l);
 
         String lt = course.getLearnStart() + " to " + course.getLearnFinish();
         learntime.setText(lt);
 
-        String t = course.getTestDay();
+        int t = weekday.getDayCodeByDayIndex(course.getTestDayIndex());
         test.setText(t);
 
         String tt = course.getTestStart() + " to " + course.getTestFinish();

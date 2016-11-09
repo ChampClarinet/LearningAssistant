@@ -2,16 +2,18 @@ package com.example.clarinetmaster.learningassistant.Model;
 
 public class Course {
 
+    private int id;
     private String courseName;
-    private String courseDay;
+    private int courseDay;
     private String learnStart;
     private String learnFinish;
-    private String testDay;
+    private int testDay;
     private String testStart;
     private String testFinish;
     private String courseDesc;
 
-    public Course(String courseName, String courseDay, String learnStart, String learnFinish, String testDay, String testStart, String testFinish, String courseDesc) {
+    public Course(int id, String courseName, int courseDay, String learnStart, String learnFinish, int testDay, String testStart, String testFinish, String courseDesc) {
+        this.id = id;
         this.courseName = courseName;
         this.courseDay = courseDay;
         this.learnStart = learnStart;
@@ -22,7 +24,18 @@ public class Course {
         this.courseDesc = courseDesc;
     }
 
-    public Course(String courseName, String courseDay, String learnStart, String learnFinish, String testDay, String testStart, String testFinish) {
+    public Course(String courseName, int courseDay, String learnStart, String learnFinish, int testDay, String testStart, String testFinish, String courseDesc) {
+        this.courseName = courseName;
+        this.courseDay = courseDay;
+        this.learnStart = learnStart;
+        this.learnFinish = learnFinish;
+        this.testDay = testDay;
+        this.testStart = testStart;
+        this.testFinish = testFinish;
+        this.courseDesc = courseDesc;
+    }
+
+    public Course(String courseName, int courseDay, String learnStart, String learnFinish, int testDay, String testStart, String testFinish) {
         this.courseName = courseName;
         this.courseDay = courseDay;
         this.learnStart = learnStart;
@@ -33,11 +46,15 @@ public class Course {
         this.courseDesc = null;
     }
 
+    public int getId(){
+        return id;
+    }
+
     public String getCourseName() {
         return courseName;
     }
 
-    public String getCourseDay() {
+    public int getCourseDayIndex() {
         return courseDay;
     }
 
@@ -49,7 +66,7 @@ public class Course {
         return learnFinish;
     }
 
-    public String getTestDay() {
+    public int getTestDayIndex() {
         return testDay;
     }
 

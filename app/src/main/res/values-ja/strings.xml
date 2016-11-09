@@ -22,7 +22,7 @@
     <string name="day">日</string>
     <string name="from">開始日</string>
     <string name="to">終了日</string>
-    <string name="save">保存</string>
+    <string name="saveButton">保存</string>
     <string name="yesButton">はい</string>
     <string name="learntimeFormLabel">学の日</string>
 </resources>

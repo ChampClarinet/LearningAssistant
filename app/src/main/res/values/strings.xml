@@ -26,11 +26,18 @@
     <string name="from">from</string>
     <string name="to">to</string>
     <string name="day">Day</string>
-    <string name="save">SAVE</string>
+    <string name="saveButton">SAVE</string>
     <string name="confirm">Confirmation</string>
     <string name="conMessage">Please check your details</string>
     <string name="yesButton">YES</string>
     <string name="backButton">BACK</string>
     <string name="courses">Courses</string>
     <string name="schedule">Schedule</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="delete_confirm">Are you sure to delete</string>
+    <string name="courseEdit">Edit Course</string>
+    <string name="added">added.</string>
+    <string name="updated">updated.</string>
+    <string name="has_been_deleted">has been deleted.</string>
 </resources>
