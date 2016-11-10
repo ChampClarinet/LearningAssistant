@@ -1,46 +1,52 @@
 package com.example.clarinetmaster.learningassistant.Model;
 
-public class Course {
+import android.content.res.Resources;
+
+import com.example.clarinetmaster.learningassistant.Info.weekday;
+
+import java.io.Serializable;
+
+public class Course implements Serializable{
 
     private int id;
     private String courseName;
-    private int courseDay;
+    private int courseDayIndex;
     private String learnStart;
     private String learnFinish;
-    private int testDay;
+    private int testDayIndex;
     private String testStart;
     private String testFinish;
     private String courseDesc;
 
-    public Course(int id, String courseName, int courseDay, String learnStart, String learnFinish, int testDay, String testStart, String testFinish, String courseDesc) {
+    public Course(int id, String courseName, int courseDayIndex, String learnStart, String learnFinish, int testDayIndex, String testStart, String testFinish, String courseDesc) {
         this.id = id;
         this.courseName = courseName;
-        this.courseDay = courseDay;
+        this.courseDayIndex = courseDayIndex;
         this.learnStart = learnStart;
         this.learnFinish = learnFinish;
-        this.testDay = testDay;
+        this.testDayIndex = testDayIndex;
         this.testStart = testStart;
         this.testFinish = testFinish;
         this.courseDesc = courseDesc;
     }
 
-    public Course(String courseName, int courseDay, String learnStart, String learnFinish, int testDay, String testStart, String testFinish, String courseDesc) {
+    public Course(String courseName, int courseDayIndex, String learnStart, String learnFinish, int testDayIndex, String testStart, String testFinish, String courseDesc) {
         this.courseName = courseName;
-        this.courseDay = courseDay;
+        this.courseDayIndex = courseDayIndex;
         this.learnStart = learnStart;
         this.learnFinish = learnFinish;
-        this.testDay = testDay;
+        this.testDayIndex = testDayIndex;
         this.testStart = testStart;
         this.testFinish = testFinish;
         this.courseDesc = courseDesc;
     }
 
-    public Course(String courseName, int courseDay, String learnStart, String learnFinish, int testDay, String testStart, String testFinish) {
+    public Course(String courseName, int courseDayIndex, String learnStart, String learnFinish, int testDayIndex, String testStart, String testFinish) {
         this.courseName = courseName;
-        this.courseDay = courseDay;
+        this.courseDayIndex = courseDayIndex;
         this.learnStart = learnStart;
         this.learnFinish = learnFinish;
-        this.testDay = testDay;
+        this.testDayIndex = testDayIndex;
         this.testStart = testStart;
         this.testFinish = testFinish;
         this.courseDesc = null;
@@ -55,7 +61,7 @@ public class Course {
     }
 
     public int getCourseDayIndex() {
-        return courseDay;
+        return courseDayIndex;
     }
 
     public String getLearnStart() {
@@ -67,7 +73,7 @@ public class Course {
     }
 
     public int getTestDayIndex() {
-        return testDay;
+        return testDayIndex;
     }
 
     public String getTestStart() {

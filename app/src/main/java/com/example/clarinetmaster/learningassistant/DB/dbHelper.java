@@ -5,9 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.util.Calendar;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 
 import com.example.clarinetmaster.learningassistant.Info.weekday;
 import com.example.clarinetmaster.learningassistant.Model.Course;
+
+import java.util.Date;
 
 public class dbHelper extends SQLiteOpenHelper{
 
@@ -67,7 +72,7 @@ public class dbHelper extends SQLiteOpenHelper{
             COLID+" INTEGER PRIMARY KEY AUTOINCREMENT," + /**Constraint to create this field every table*/
             COLASSIGNMENTNAME+" TEXT," +
             COLASSIGNMENTDESC+" TEXT," +
-            COLASSIGNMENTDEADLINE+" INTEGER" +
+            COLASSIGNMENTDEADLINE+" DATE" +
             ")";
 
     public dbHelper(Context context){
@@ -81,7 +86,7 @@ public class dbHelper extends SQLiteOpenHelper{
 
     private void createTables(SQLiteDatabase db){
         db.execSQL(SQL_CREATE_TABLE_COURSE);
-        //db.execSQL(SQL_CREATE_TABLE_ASSIGNMENT);
+        db.execSQL(SQL_CREATE_TABLE_ASSIGNMENT);
         //db.execSQL(SQL_CREATE_TABLE_APPOINTMENT);
         insertExampleCourse(db);
     }
@@ -97,6 +102,9 @@ public class dbHelper extends SQLiteOpenHelper{
         cv.put(COLCOURSEDAY, weekday.getDayIndexByDayCode(weekday.MONDAY()));
         cv.put(COLCOURSESTART, "12:00");
         cv.put(COLCOURSEFINISH, "15:00");
+        cv.put(COLTESTDAY, weekday.getDayIndexByDayCode(weekday.FRIDAY()));
+        cv.put(COLTESTSTART, "20:00");
+        cv.put(COLTESTFINISH, "23:00");
         db.insert(TBLCOURSE, null, cv);
 
         cv = new ContentValues();
@@ -105,6 +113,9 @@ public class dbHelper extends SQLiteOpenHelper{
         cv.put(COLCOURSEDAY, weekday.getDayIndexByDayCode(weekday.THURSDAY()));
         cv.put(COLCOURSESTART, "8:00");
         cv.put(COLCOURSEFINISH, "10:20");
+        cv.put(COLTESTDAY, weekday.getDayIndexByDayCode(weekday.FRIDAY()));
+        cv.put(COLTESTSTART, "20:00");
+        cv.put(COLTESTFINISH, "23:00");
         db.insert(TBLCOURSE, null, cv);
 
         cv = new ContentValues();
@@ -113,8 +124,21 @@ public class dbHelper extends SQLiteOpenHelper{
         cv.put(COLCOURSEDAY, weekday.getDayIndexByDayCode(weekday.FRIDAY()));
         cv.put(COLCOURSESTART, "9:00");
         cv.put(COLCOURSEFINISH, "12:05");
+        cv.put(COLTESTDAY, weekday.getDayIndexByDayCode(weekday.FRIDAY()));
+        cv.put(COLTESTSTART, "20:00");
+        cv.put(COLTESTFINISH, "23:00");
         db.insert(TBLCOURSE, null, cv);
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    /*private void insertExampleAssignment(SQLiteDatabase db){
+        ContentValues cv = new ContentValues();
+        cv.put(COLASSIGNMENTNAME, "EX ASSIGN");
+        cv.put(COLASSIGNMENTDESC, "Example Assignment");
+        Calendar c = Calendar.getInstance();
+        Date date = c.getTime();
+        cv.put(COLASSIGNMENTDEADLINE, date);
+    }*/
 
     public Course selectCourseById(SQLiteDatabase db, int id){
         Cursor c = db.query(TBLCOURSE, null, COLID+" = "+id, null, null, null, null);

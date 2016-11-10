@@ -33,11 +33,13 @@
     <string name="backButton">BACK</string>
     <string name="courses">Courses</string>
     <string name="schedule">Schedule</string>
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
     <string name="delete_confirm">Are you sure to delete</string>
     <string name="courseEdit">Edit Course</string>
     <string name="added">added.</string>
     <string name="updated">updated.</string>
     <string name="has_been_deleted">has been deleted.</string>
+    <string name="assignment">Assignments</string>
+    <string name="courseDesc">Course Description</string>
 </resources>

@@ -25,4 +25,11 @@
     <string name="saveButton">保存</string>
     <string name="yesButton">はい</string>
     <string name="learntimeFormLabel">学の日</string>
+    <string name="added">を追加されました。</string>
+    <string name="courseEdit">学科を編集する</string>
+    <string name="menu_delete">削除</string>
+    <string name="delete_confirm">を削除してよろしいですか？</string>
+    <string name="has_been_deleted">を削除されました。</string>
+    <string name="menu_edit">編集</string>
+    <string name="updated">を更新されました。</string>
 </resources>

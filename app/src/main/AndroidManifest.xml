@@ -27,10 +27,12 @@
             android:label="@string/courseAdd" />
         <activity
             android:name=".CourseList"
-            android:label="@string/courses"></activity>
+            android:label="@string/courses" />
         <activity
             android:name=".EditCourseActivity"
-            android:label="@string/courseEdit"></activity>
+            android:label="@string/courseEdit" />
+        <activity android:name=".CourseDescription" />
+        <activity android:name=".addAssignment"></activity>
     </application>
 
 </manifest>

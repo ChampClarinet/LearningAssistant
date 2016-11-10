@@ -3,9 +3,9 @@
 
     <item
         android:id="@+id/edit_course_menu"
-        android:title="@string/edit" />
+        android:title="@string/menu_edit" />
     <item
         android:id="@+id/delete_course_menu"
-        android:title="@string/delete" />
+        android:title="@string/menu_delete" />
 
 </menu>

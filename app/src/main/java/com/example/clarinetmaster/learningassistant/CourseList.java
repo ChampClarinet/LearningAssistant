@@ -19,6 +19,7 @@ import com.example.clarinetmaster.learningassistant.Adapters.CourseAdapter;
 import com.example.clarinetmaster.learningassistant.DB.dbHelper;
 import com.example.clarinetmaster.learningassistant.Model.Course;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class CourseList extends AppCompatActivity {
@@ -41,8 +42,24 @@ public class CourseList extends AppCompatActivity {
         mHelper = new dbHelper(this);
         db = mHelper.getWritableDatabase();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Course selectingCourse = (Course) parent.getItemAtPosition(position);
+                Log.i("OnClick", "ListView Triggered");
+                openDescriptionPage(selectingCourse);
+            }
+        });
+
         registerForContextMenu(listView);
 
+    }
+
+    public void openDescriptionPage(Course selectingCourse) {
+        Log.i(TAG, "start description activity");
+        Intent intent = new Intent(this, CourseDescription.class);
+        intent.putExtra("Course", selectingCourse);
+        startActivity(intent);
     }
 
     @Override
@@ -56,7 +73,7 @@ public class CourseList extends AppCompatActivity {
     private void fecthingData() {
         Cursor cursor = db.query(dbHelper.TBLCOURSE, null, null, null, null, null, dbHelper.COLCOURSENAME);
         courseArrayList.clear();
-        while(cursor.moveToNext()){
+        while (cursor.moveToNext()) {
             courseArrayList.add(new Course(cursor.getInt(cursor.getColumnIndex(dbHelper.COLID)),
                     cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSENAME)),
                     cursor.getInt(cursor.getColumnIndex(dbHelper.COLCOURSEDAY)),
@@ -76,7 +93,7 @@ public class CourseList extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
 
-        if(v.getId() == R.id.courseListView){
+        if (v.getId() == R.id.courseListView) {
             getMenuInflater().inflate(R.menu.edit_delete_course_menu, menu);
         }
 
@@ -86,25 +103,26 @@ public class CourseList extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int courseID = courseArrayList.get(info.position).getId();
-        switch (item.getItemId()){
-            case R.id.edit_course_menu: Intent i = new Intent(this, EditCourseActivity.class);
-                i.putExtra("targetID", courseID);
+        Course course = courseArrayList.get(info.position);
+        switch (item.getItemId()) {
+            case R.id.edit_course_menu:
+                Intent i = new Intent(this, EditCourseActivity.class);
+                i.putExtra("targetID", course.getId());
                 startActivity(i);
                 break;
-            case R.id.delete_course_menu: deleteCourse(courseID);
-            default: return false;
+            case R.id.delete_course_menu:
+                deleteCourse(course);
+            default:
+                return false;
         }
         return false;
     }
 
-    private void deleteCourse(final int id) {
-        final String cname = mHelper.selectCourseById(db, id).getCourseName();
-        Log.i(TAG, cname);
+    public void deleteCourse(final Course course) {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setTitle(R.string.confirm);
         //if(Locale.getDefault().getDisplayLanguage() == Locale.JAPAN.toString());
-        dialog.setMessage(getResources().getString(R.string.delete_confirm)+" "+cname);
+        dialog.setMessage(getResources().getString(R.string.delete_confirm) + " " + course.getCourseName());
         dialog.setNegativeButton(R.string.backButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -114,10 +132,10 @@ public class CourseList extends AppCompatActivity {
         dialog.setPositiveButton(R.string.yesButton, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                db.delete(dbHelper.TBLCOURSE, dbHelper.COLID+" = "+id, null);
+                db.delete(dbHelper.TBLCOURSE, dbHelper.COLID + " = " + course.getId(), null);
                 dialog.dismiss();
                 Intent i = getIntent();
-                deleted(cname);
+                deleted(course);
                 finish();
                 startActivity(i);
             }
@@ -125,8 +143,8 @@ public class CourseList extends AppCompatActivity {
         dialog.show();
     }
 
-    private void deleted(String name){
-        String msg = "\""+name+"\""+" "+getResources().getString(R.string.has_been_deleted);
+    private void deleted(Course course) {
+        String msg = "\"" + course.getCourseName() + "\"" + " " + getResources().getString(R.string.has_been_deleted);
         Toast.makeText(this, msg, Toast.LENGTH_SHORT);
     }
 

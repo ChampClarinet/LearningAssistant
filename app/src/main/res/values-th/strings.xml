@@ -25,4 +25,11 @@
     <string name="to">ถึง</string>
     <string name="saveButton">บันทึก</string>
     <string name="from">ตั้งแต่</string>
+    <string name="added">ได้ถูกเพิ่มเรียบร้อย</string>
+    <string name="courseEdit">แก้ไขรายวิชา</string>
+    <string name="delete_confirm">ยืนยันการลบ</string>
+    <string name="has_been_deleted">ได้ถูกลบ</string>
+    <string name="menu_delete">ลบ</string>
+    <string name="menu_edit">แก้ไข</string>
+    <string name="updated">แก้ไขแล้ว</string>
 </resources>
