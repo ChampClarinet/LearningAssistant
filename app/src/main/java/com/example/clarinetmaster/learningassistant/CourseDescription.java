@@ -27,6 +27,8 @@ public class CourseDescription extends AppCompatActivity {
     private Course course;
     private TextView learnTimeData;
     private TextView testTimeData;
+    private TextView courseDesc;
+    private TextView courseDescLabel;
 
     private dbHelper mHelper;
     private SQLiteDatabase db;
@@ -36,7 +38,9 @@ public class CourseDescription extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_description);
 
-        getSupportActionBar().setTitle(getResources().getString(R.string.courseDesc));
+        course = (Course) getIntent().getSerializableExtra("Course");
+
+        getSupportActionBar().setTitle(course.getCourseName());
 
         mHelper = new dbHelper(this);
         db = mHelper.getWritableDatabase();
@@ -50,11 +54,14 @@ public class CourseDescription extends AppCompatActivity {
             }
         });
 
-        course = (Course) getIntent().getSerializableExtra("Course");
         learnTimeData = (TextView) findViewById(R.id.learntimedata);
         testTimeData = (TextView) findViewById(R.id.testtimedata);
+        courseDesc = (TextView) findViewById(R.id.courseDescData);
+        courseDescLabel = (TextView) findViewById(R.id.courseDescLabel);
         getLearnOnLabel();
         getTestOnLabel();
+        courseDesc.setText(course.getCourseDesc());
+        courseDescLabel.setText(getResources().getString(R.string.courseDesc)+" :");
 
     }
 

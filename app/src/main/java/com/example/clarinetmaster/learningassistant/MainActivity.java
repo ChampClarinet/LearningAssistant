@@ -1,6 +1,7 @@
 package com.example.clarinetmaster.learningassistant;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -9,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -40,6 +42,22 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        testAssignment(db);
+    }
+
+    private void testAssignment(SQLiteDatabase db){
+        Cursor cursor = db.query(dbHelper.TBLASSIGNMENT, null, null, null, null, null, null);
+        cursor.moveToNext();
+        Log.i(dbHelper.COLASSIGNMENTNAME, cursor.getString(cursor.getColumnIndex(dbHelper.COLASSIGNMENTNAME)));
+        Log.i(dbHelper.COLASSIGNMENTDESC, cursor.getString(cursor.getColumnIndex(dbHelper.COLASSIGNMENTDESC)));
+        Log.i(dbHelper.COLASSIGNMENTDEADLINE, cursor.getString(cursor.getColumnIndex(dbHelper.COLASSIGNMENTDEADLINE)));
+        String getAssociateCourseSQL = dbHelper.COLID+" = "+cursor.getInt(cursor.getColumnIndex(dbHelper.COLASSIGNMENTOF));
+        Cursor cursor2 = db.query(dbHelper.TBLCOURSE, null, getAssociateCourseSQL, null, null, null, null);
+        Log.i("SQLQUERY", getAssociateCourseSQL);
+        cursor2.moveToNext();
+        Log.i(dbHelper.COLASSIGNMENTOF, ""+cursor.getInt(cursor.getColumnIndex(dbHelper.COLASSIGNMENTOF)));
+        Log.i(dbHelper.COLCOURSENAME, cursor2.getString(cursor2.getColumnIndex(dbHelper.COLCOURSENAME)));
     }
 
     @Override

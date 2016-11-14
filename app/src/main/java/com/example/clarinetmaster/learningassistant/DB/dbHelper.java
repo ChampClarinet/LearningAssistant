@@ -5,14 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.icu.util.Calendar;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
+import android.util.Log;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import com.example.clarinetmaster.learningassistant.Info.weekday;
 import com.example.clarinetmaster.learningassistant.Model.Course;
 
-import java.util.Date;
 
 public class dbHelper extends SQLiteOpenHelper{
 
@@ -45,6 +46,7 @@ public class dbHelper extends SQLiteOpenHelper{
     public static final String COLASSIGNMENTNAME = "ASSIGNMENTNAME";
     public static final String COLASSIGNMENTDESC = "ASSIGNMENTDESC";
     public static final String COLASSIGNMENTDEADLINE = "ASSIGNMENTDEADLINE";
+    public static final String COLASSIGNMENTOF = "ASSIGNMENTOF";
 
     private static final String SQL_CREATE_TABLE_APPOINTMENT = "CREATE TABLE "+TBLAPPOINTMENT+" (" +
             COLID+" INTEGER PRIMARY KEY AUTOINCREMENT," + /**Constraint to create this field every table*/
@@ -72,7 +74,8 @@ public class dbHelper extends SQLiteOpenHelper{
             COLID+" INTEGER PRIMARY KEY AUTOINCREMENT," + /**Constraint to create this field every table*/
             COLASSIGNMENTNAME+" TEXT," +
             COLASSIGNMENTDESC+" TEXT," +
-            COLASSIGNMENTDEADLINE+" DATE" +
+            COLASSIGNMENTDEADLINE+" DATE," +
+            COLASSIGNMENTOF+" INTEGER"+
             ")";
 
     public dbHelper(Context context){
@@ -89,6 +92,7 @@ public class dbHelper extends SQLiteOpenHelper{
         db.execSQL(SQL_CREATE_TABLE_ASSIGNMENT);
         //db.execSQL(SQL_CREATE_TABLE_APPOINTMENT);
         insertExampleCourse(db);
+        insertExampleAssignment(db);
     }
 
     private void dropAllTables(SQLiteDatabase db){
@@ -130,15 +134,19 @@ public class dbHelper extends SQLiteOpenHelper{
         db.insert(TBLCOURSE, null, cv);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    /*private void insertExampleAssignment(SQLiteDatabase db){
+    private void insertExampleAssignment(SQLiteDatabase db){
         ContentValues cv = new ContentValues();
         cv.put(COLASSIGNMENTNAME, "EX ASSIGN");
         cv.put(COLASSIGNMENTDESC, "Example Assignment");
-        Calendar c = Calendar.getInstance();
-        Date date = c.getTime();
-        cv.put(COLASSIGNMENTDEADLINE, date);
-    }*/
+        Calendar mCalendar = Calendar.getInstance();
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL);
+        Date date = mCalendar.getTime();
+        String textDate = dateFormat.format(date);
+        Log.i("DateQueryData", textDate);
+        cv.put(COLASSIGNMENTDEADLINE, textDate);
+        cv.put(COLASSIGNMENTOF, 1);
+        db.insert(TBLASSIGNMENT, null, cv);
+    }
 
     public Course selectCourseById(SQLiteDatabase db, int id){
         Cursor c = db.query(TBLCOURSE, null, COLID+" = "+id, null, null, null, null);

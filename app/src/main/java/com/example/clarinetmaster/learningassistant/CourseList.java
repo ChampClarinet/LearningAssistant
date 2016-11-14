@@ -104,6 +104,7 @@ public class CourseList extends AppCompatActivity {
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Course course = courseArrayList.get(info.position);
+        Log.i("CourseID", ""+course.getId());
         switch (item.getItemId()) {
             case R.id.edit_course_menu:
                 Intent i = new Intent(this, EditCourseActivity.class);
