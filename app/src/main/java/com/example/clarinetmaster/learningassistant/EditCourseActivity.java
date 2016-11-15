@@ -22,7 +22,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clarinetmaster.learningassistant.DB.dbHelper;
-import com.example.clarinetmaster.learningassistant.Info.Time;
 import com.example.clarinetmaster.learningassistant.Info.errorAlert;
 import com.example.clarinetmaster.learningassistant.Info.weekday;
 import com.example.clarinetmaster.learningassistant.Model.Course;
@@ -35,9 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import static com.example.clarinetmaster.learningassistant.Info.Time.HOUR;
-import static com.example.clarinetmaster.learningassistant.Info.Time.MINUTE;
 
 public class EditCourseActivity extends AppCompatActivity {
 

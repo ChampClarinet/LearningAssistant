@@ -32,4 +32,11 @@
     <string name="has_been_deleted">を削除されました。</string>
     <string name="menu_edit">編集</string>
     <string name="updated">を更新されました。</string>
+    <string name="courseDesc">学科記述</string>
+    <string name="assignment">宿題</string>
+    <string name="err_course_name">名前の学科をタイプしてください。</string>
+    <string name="err_date">これは前日！</string>
+    <string name="err_time">終了の前に始める時間を設定することは出来ません。</string>
+    <string name="selectDate">年月日</string>
+    <string name="select_time">時間</string>
 </resources>

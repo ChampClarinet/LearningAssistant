@@ -32,4 +32,11 @@
     <string name="menu_delete">ลบ</string>
     <string name="menu_edit">แก้ไข</string>
     <string name="updated">แก้ไขแล้ว</string>
+    <string name="courseDesc">รายละเอียดรายวิชา</string>
+    <string name="assignment">งาน</string>
+    <string name="err_course_name">โปรดใส่ชื่อรายวิชา</string>
+    <string name="err_date">ไม่สามารถตั้งวันที่ผ่านมาแล้วได้</string>
+    <string name="err_time">ไม่สามารถตั้งเวลาเริ่มหลังเวลาสิ้นสุดได้</string>
+    <string name="selectDate">วันที่</string>
+    <string name="select_time">เวลา</string>
 </resources>

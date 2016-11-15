@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -92,7 +93,7 @@ public class dbHelper extends SQLiteOpenHelper{
         db.execSQL(SQL_CREATE_TABLE_ASSIGNMENT);
         //db.execSQL(SQL_CREATE_TABLE_APPOINTMENT);
         insertExampleCourse(db);
-        insertExampleAssignment(db);
+        //insertExampleAssignment(db);
     }
 
     private void dropAllTables(SQLiteDatabase db){
@@ -134,20 +135,21 @@ public class dbHelper extends SQLiteOpenHelper{
         db.insert(TBLCOURSE, null, cv);
     }
 
-    private void insertExampleAssignment(SQLiteDatabase db){
+    /*private void insertExampleAssignment(SQLiteDatabase db){
         ContentValues cv = new ContentValues();
         cv.put(COLASSIGNMENTNAME, "EX ASSIGN");
         cv.put(COLASSIGNMENTDESC, "Example Assignment");
         Calendar mCalendar = Calendar.getInstance();
-        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.FULL);
         Date date = mCalendar.getTime();
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
         String textDate = dateFormat.format(date);
         Log.i("DateQueryData", textDate);
         cv.put(COLASSIGNMENTDEADLINE, textDate);
         cv.put(COLASSIGNMENTOF, 1);
         db.insert(TBLASSIGNMENT, null, cv);
     }
-
+*/
+    
     public Course selectCourseById(SQLiteDatabase db, int id){
         Cursor c = db.query(TBLCOURSE, null, COLID+" = "+id, null, null, null, null);
         c.moveToFirst();
