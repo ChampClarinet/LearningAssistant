@@ -79,7 +79,7 @@ public class CourseList extends AppCompatActivity {
                     cursor.getInt(cursor.getColumnIndex(dbHelper.COLCOURSEDAY)),
                     cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSESTART)),
                     cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSEFINISH)),
-                    cursor.getInt(cursor.getColumnIndex(dbHelper.COLTESTDAY)),
+                    cursor.getString(cursor.getColumnIndex(dbHelper.COLTESTDAY)),
                     cursor.getString(cursor.getColumnIndex(dbHelper.COLTESTSTART)),
                     cursor.getString(cursor.getColumnIndex(dbHelper.COLTESTFINISH)),
                     cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSEDESC))

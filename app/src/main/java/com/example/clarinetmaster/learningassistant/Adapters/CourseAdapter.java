@@ -54,7 +54,7 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         String lt = course.getLearnStart() + " to " + course.getLearnFinish();
         learntime.setText(lt);
 
-        int t = weekday.getDayCodeByDayIndex(course.getTestDayIndex());
+        String t = course.getTestDay();
         test.setText(t);
 
         String tt = course.getTestStart() + " to " + course.getTestFinish();

@@ -65,7 +65,7 @@ public class dbHelper extends SQLiteOpenHelper{
             COLCOURSEDAY+" INTEGER,"+
             COLCOURSESTART+" TEXT," +
             COLCOURSEFINISH+" TEXT," +
-            COLTESTDAY+" INTEGER," +
+            COLTESTDAY+" TEXT," +
             COLTESTSTART +" TEXT," +
             COLTESTFINISH +" TEXT"+
             ")";
@@ -106,7 +106,7 @@ public class dbHelper extends SQLiteOpenHelper{
         cv.put(COLCOURSEDAY, weekday.getDayIndexByDayCode(weekday.MONDAY()));
         cv.put(COLCOURSESTART, "12:00");
         cv.put(COLCOURSEFINISH, "15:00");
-        cv.put(COLTESTDAY, weekday.getDayIndexByDayCode(weekday.FRIDAY()));
+        cv.put(COLTESTDAY, "December 15, 2016");
         cv.put(COLTESTSTART, "20:00");
         cv.put(COLTESTFINISH, "23:00");
         db.insert(TBLCOURSE, null, cv);
@@ -117,7 +117,7 @@ public class dbHelper extends SQLiteOpenHelper{
         cv.put(COLCOURSEDAY, weekday.getDayIndexByDayCode(weekday.THURSDAY()));
         cv.put(COLCOURSESTART, "8:00");
         cv.put(COLCOURSEFINISH, "10:20");
-        cv.put(COLTESTDAY, weekday.getDayIndexByDayCode(weekday.FRIDAY()));
+        cv.put(COLTESTDAY, "December 1, 2016");
         cv.put(COLTESTSTART, "20:00");
         cv.put(COLTESTFINISH, "23:00");
         db.insert(TBLCOURSE, null, cv);
@@ -128,7 +128,7 @@ public class dbHelper extends SQLiteOpenHelper{
         cv.put(COLCOURSEDAY, weekday.getDayIndexByDayCode(weekday.FRIDAY()));
         cv.put(COLCOURSESTART, "9:00");
         cv.put(COLCOURSEFINISH, "12:05");
-        cv.put(COLTESTDAY, weekday.getDayIndexByDayCode(weekday.FRIDAY()));
+        cv.put(COLTESTDAY, "December 20, 2016");
         cv.put(COLTESTSTART, "20:00");
         cv.put(COLTESTFINISH, "23:00");
         db.insert(TBLCOURSE, null, cv);
@@ -155,15 +155,16 @@ public class dbHelper extends SQLiteOpenHelper{
                 c.getInt(c.getColumnIndex(COLCOURSEDAY)),
                 c.getString(c.getColumnIndex(COLCOURSESTART)),
                 c.getString(c.getColumnIndex(COLCOURSEFINISH)),
-                c.getInt(c.getColumnIndex(COLTESTDAY)),
+                c.getString(c.getColumnIndex(COLTESTDAY)),
                 c.getString(c.getColumnIndex(COLCOURSESTART)),
                 c.getString(c.getColumnIndex(COLCOURSEFINISH)),
                 c.getString(c.getColumnIndex(COLCOURSEDESC))
-                );
+        );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
 }

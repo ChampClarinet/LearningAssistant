@@ -50,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/linearLayout"
+        android:layout_marginBottom="@dimen/dividerMargin"
         android:orientation="horizontal">
 
         <TextView
@@ -61,19 +62,16 @@
             android:textColor="#000000"
             android:textSize="@dimen/formTextSize" />
 
-        <Spinner
-            android:id="@+id/startLHour"
+        <TextView
+            android:id="@+id/start_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="@string/select_time"
+            android:textSize="@dimen/formTextSize" />
 
-        <Spinner
-            android:id="@+id/startLMin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -82,6 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/linearLayout2"
+        android:layout_marginBottom="@dimen/dividerMargin"
         android:orientation="horizontal">
 
         <TextView
@@ -93,19 +92,15 @@
             android:textColor="#000000"
             android:textSize="@dimen/formTextSize" />
 
-        <Spinner
-            android:id="@+id/finishLHour"
+        <TextView
+            android:id="@+id/finish_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="@string/select_time"
+            android:textSize="@dimen/formTextSize" />
 
-        <Spinner
-            android:id="@+id/finishLMin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center" />
     </LinearLayout>
 
     <View
@@ -132,12 +127,15 @@
             android:textColor="#000000"
             android:textSize="@dimen/formTextSize" />
 
-        <Spinner
-            android:id="@+id/testDaySpinner"
+        <TextView
+            android:id="@+id/testDay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="@string/selectDate"
+            android:textSize="@dimen/formTextSize" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -146,6 +144,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/linearLayout4"
+        android:layout_marginBottom="@dimen/dividerMargin"
         android:orientation="horizontal">
 
         <TextView
@@ -157,19 +156,15 @@
             android:textColor="#000000"
             android:textSize="@dimen/formTextSize" />
 
-        <Spinner
-            android:id="@+id/startTHour"
+        <TextView
+            android:id="@+id/test_start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="@string/select_time"
+            android:textSize="@dimen/formTextSize" />
 
-        <Spinner
-            android:id="@+id/startTMin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center" />
     </LinearLayout>
 
     <LinearLayout
@@ -178,6 +173,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@id/linearLayout5"
+        android:layout_marginBottom="@dimen/dividerMargin"
         android:orientation="horizontal">
 
         <TextView
@@ -189,19 +185,14 @@
             android:textColor="#000000"
             android:textSize="@dimen/formTextSize" />
 
-        <Spinner
-            android:id="@+id/finishTHour"
+        <TextView
+            android:id="@+id/test_finish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:gravity="center" />
-
-        <Spinner
-            android:id="@+id/finishTMin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="@string/select_time"
+            android:textSize="@dimen/formTextSize" />
     </LinearLayout>
 
     <View

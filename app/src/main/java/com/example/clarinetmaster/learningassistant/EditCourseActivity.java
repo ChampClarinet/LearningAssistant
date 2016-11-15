@@ -18,15 +18,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.clarinetmaster.learningassistant.DB.dbHelper;
 import com.example.clarinetmaster.learningassistant.Info.Time;
-import com.example.clarinetmaster.learningassistant.Info.uncompleteFieldAlert;
+import com.example.clarinetmaster.learningassistant.Info.errorAlert;
 import com.example.clarinetmaster.learningassistant.Info.weekday;
 import com.example.clarinetmaster.learningassistant.Model.Course;
+import com.fourmob.datetimepicker.date.DatePickerDialog;
+import com.sleepbot.datetimepicker.time.RadialPickerLayout;
+import com.sleepbot.datetimepicker.time.TimePickerDialog;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.example.clarinetmaster.learningassistant.Info.Time.HOUR;
 import static com.example.clarinetmaster.learningassistant.Info.Time.MINUTE;
@@ -39,27 +47,16 @@ public class EditCourseActivity extends AppCompatActivity {
 
     private EditText newCourseName;
     private Spinner learnDaySpinner;
-    private Spinner testDaySpinner;
-    private Spinner startLHourSpinner;
-    private Spinner startLMinSpinner;
-    private Spinner finishLHourSpinner;
-    private Spinner finishLMinSpinner;
-    private Spinner startTHourSpinner;
-    private Spinner startTMinSpinner;
-    private Spinner finishTHourSpinner;
-    private Spinner finishTMinSpinner;
+    private TextView testDayView;
+    private TextView startTime;
+    private TextView finishTime;
+    private TextView testStart;
+    private TextView testFinish;
     private EditText courseDesc;
 
+    private Calendar mCalendar;
+
     private int courseDay;
-    private int testDay;
-    private String courseStartH;
-    private String courseStartM;
-    private String courseFinishH;
-    private String courseFinishM;
-    private String testStartH;
-    private String testStartM;
-    private String testFinishH;
-    private String testFinishM;
 
     private dbHelper mHelper;
     private SQLiteDatabase db;
@@ -76,7 +73,7 @@ public class EditCourseActivity extends AppCompatActivity {
 
         extras = getIntent().getExtras();
 
-        findViewByIDs();
+        inherits();
         setAdapter();
         setListener();
         getOldData();
@@ -92,48 +89,40 @@ public class EditCourseActivity extends AppCompatActivity {
         newCourseName.setText(oldCourse.getCourseName());
 
         learnDaySpinner.setSelection(oldCourse.getCourseDayIndex());
-        testDaySpinner.setSelection(oldCourse.getTestDayIndex());
+        testDayView.setText(oldCourse.getTestDay());
 
-        String time = oldCourse.getLearnStart();
-        Log.i(TAG, "LS = "+time);
-        startLHourSpinner.setSelection(Integer.parseInt(Time.extractHour(time)));
-        startLMinSpinner.setSelection(Integer.parseInt(Time.extractMinute(time)));
-        Log.i(TAG, ""+Integer.parseInt(Time.extractHour(time))+" "+Integer.parseInt(Time.extractMinute(time)));
+        startTime.setText(oldCourse.getLearnStart());
+        finishTime.setText(oldCourse.getLearnFinish());
 
-        time = oldCourse.getLearnFinish();
-        Log.i(TAG, "LF = "+time);
-        finishLHourSpinner.setSelection(Integer.parseInt(Time.extractHour(time)));
-        finishLMinSpinner.setSelection(Integer.parseInt(Time.extractMinute(time)));
-        Log.i(TAG, ""+Integer.parseInt(Time.extractHour(time))+" "+Integer.parseInt(Time.extractMinute(time)));
+        testStart.setText(oldCourse.getTestStart());
+        testFinish.setText(oldCourse.getTestFinish());
 
-        time = oldCourse.getTestStart();
-        Log.i(TAG, "TS = "+time);
-        startTHourSpinner.setSelection(Integer.parseInt(Time.extractHour(time)));
-        startTMinSpinner.setSelection(Integer.parseInt(Time.extractMinute(time)));
-        Log.i(TAG, ""+Integer.parseInt(Time.extractHour(time))+" "+Integer.parseInt(Time.extractMinute(time)));
+        if(oldCourse.getCourseDesc() != null) courseDesc.setText(oldCourse.getCourseDesc());
 
-        time = oldCourse.getTestFinish();
-        Log.i(TAG, "TF = "+time);
-        finishTHourSpinner.setSelection(Integer.parseInt(Time.extractHour(time)));
-        finishTMinSpinner.setSelection(Integer.parseInt(Time.extractMinute(time)));
-        Log.i(TAG, ""+Integer.parseInt(Time.extractHour(time))+" "+Integer.parseInt(Time.extractMinute(time)));
     }
 
-    private void findViewByIDs() {
+    private void inherits() {
+        mCalendar = Calendar.getInstance();
+
         newCourseName = (EditText) findViewById(R.id.newCourseName);
+
         learnDaySpinner = (Spinner) findViewById(R.id.learnDaySpinner);
-        testDaySpinner = (Spinner) findViewById(R.id.testDaySpinner);
+        testDayView = (TextView) findViewById(R.id.testDay);
 
-        startLHourSpinner = (Spinner) findViewById(R.id.startLHour);
-        startLMinSpinner = (Spinner) findViewById(R.id.startLMin);
-        finishLHourSpinner = (Spinner) findViewById(R.id.finishLHour);
-        finishLMinSpinner = (Spinner) findViewById(R.id.finishLMin);
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
+        Date date = mCalendar.getTime();
+        String textDate = dateFormat.format(date);
+        testDayView.setText(textDate);
 
-        startTHourSpinner = (Spinner) findViewById(R.id.startTHour);
-        startTMinSpinner = (Spinner) findViewById(R.id.startTMin);
-        finishTHourSpinner = (Spinner) findViewById(R.id.finishTHour);
-        finishTMinSpinner = (Spinner) findViewById(R.id.finishTMin);
+        startTime = (TextView) findViewById(R.id.start_time);
+        startTime.setText(getCurTime());
+        finishTime = (TextView) findViewById(R.id.finish_time);
+        finishTime.setText(getCurTime());
 
+        testStart = (TextView) findViewById(R.id.test_start);
+        testStart.setText(getCurTime());
+        testFinish = (TextView) findViewById(R.id.test_finish);
+        testFinish.setText(getCurTime());
         courseDesc = (EditText) findViewById(R.id.courseDesc);
 
     }
@@ -153,7 +142,7 @@ public class EditCourseActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
                     inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
             }
@@ -162,7 +151,7 @@ public class EditCourseActivity extends AppCompatActivity {
         courseDesc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
+                if (!hasFocus) {
                     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService((Activity.INPUT_METHOD_SERVICE));
                     inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
                 }
@@ -173,7 +162,7 @@ public class EditCourseActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 courseDay = position;
-                Log.i("courseDay", ""+courseDay);
+                Log.i("courseDay", "" + courseDay);
             }
 
             @Override
@@ -182,114 +171,87 @@ public class EditCourseActivity extends AppCompatActivity {
             }
         });
 
-        testDaySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        startTime.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                testDay = position;
-                Log.i("testDay", ""+testDay);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        startLHourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                courseStartH = startLHourSpinner.getSelectedItem().toString();
-                Log.i("courseStartH", courseStartH);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        startLMinSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                courseStartM = startLMinSpinner.getSelectedItem().toString();
-                Log.i("courseStartM", courseStartM);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        finishLHourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                courseFinishH = finishLHourSpinner.getSelectedItem().toString();
-                Log.i("courseFinishH", courseFinishH);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        finishLMinSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                courseFinishM = finishLMinSpinner.getSelectedItem().toString();
-                Log.i("courseFinishM", courseFinishM);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                TimePickerDialog timePicker = TimePickerDialog.newInstance(
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
+                                startTime.setText(addZero(hourOfDay) + ":" + addZero(minute));
+                            }
+                        }, getCurHourInt(), getCurMinInt(), true, false
+                );
+                timePicker.show(getSupportFragmentManager(), "timePicker");
             }
         });
 
-        startTHourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        finishTime.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                testStartH = startTHourSpinner.getSelectedItem().toString();
-                Log.i("testStartH", testStartH);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        startTMinSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                testStartM = startTMinSpinner.getSelectedItem().toString();
-                Log.i("testStartM", testStartM);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                TimePickerDialog timePicker = TimePickerDialog.newInstance(
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+                                finishTime.setText(addZero(hourOfDay) + ":" + addZero(minute));
+                            }
+                        }, getCurHourInt(), getCurMinInt(), true, false
+                );
+                timePicker.show(getSupportFragmentManager(), "timePicker");
             }
         });
-        finishTHourSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                testFinishH = finishTHourSpinner.getSelectedItem().toString();
-                Log.i("testFinishH", testFinishH);
-            }
 
+        testDayView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                DatePickerDialog datePicker = DatePickerDialog.newInstance(
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
+                                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
+                                mCalendar.set(year, month, day);
+                                Date date = mCalendar.getTime();
+                                String textDate = dateFormat.format(date);
+                                if(validDate(textDate)) testDayView.setText(textDate);
+                            }
+                        },
+                        mCalendar.get(Calendar.YEAR),
+                        mCalendar.get(Calendar.MONTH),
+                        mCalendar.get(Calendar.DAY_OF_MONTH),
+                        false
+                );
+                datePicker.setYearRange(1903, 2036);
+                datePicker.show(getSupportFragmentManager(), "datePicker");
             }
         });
-        finishTMinSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        testStart.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                testFinishM = finishTMinSpinner.getSelectedItem().toString();
-                Log.i("testFinishM", testFinishM);
+            public void onClick(View v) {
+                TimePickerDialog timePicker = TimePickerDialog.newInstance(
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+                                testStart.setText(addZero(hourOfDay) + ":" + addZero(minute));
+                            }
+                        }, getCurHourInt(), getCurMinInt(), true, false
+                );
+                timePicker.show(getSupportFragmentManager(), "timePicker");
             }
+        });
 
+        testFinish.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                TimePickerDialog timePicker = TimePickerDialog.newInstance(
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+                                testFinish.setText(addZero(hourOfDay) + ":" + addZero(minute));
+                            }
+                        }, getCurHourInt(), getCurMinInt(), true, false
+                );
+                timePicker.show(getSupportFragmentManager(), "timePicker");
             }
         });
 
@@ -297,23 +259,9 @@ public class EditCourseActivity extends AppCompatActivity {
 
     private void setAdapter() {
         ArrayAdapter<String> adapterD = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, day());
-        ArrayAdapter<String> adapterH = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, HOUR());
-        ArrayAdapter<String> adapterM = new ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, MINUTE());
 
         learnDaySpinner.setAdapter(adapterD);
-        testDaySpinner.setAdapter(adapterD);
-
-        startLHourSpinner.setAdapter(adapterH);
-        startLMinSpinner.setAdapter(adapterM);
-
-        finishLHourSpinner.setAdapter(adapterH);
-        finishLMinSpinner.setAdapter(adapterM);
-
-        startTHourSpinner.setAdapter(adapterH);
-        startTMinSpinner.setAdapter(adapterM);
-
-        finishTHourSpinner.setAdapter(adapterH);
-        finishTMinSpinner.setAdapter(adapterM);
+        learnDaySpinner.setSelection(0);
 
     }
 
@@ -349,15 +297,25 @@ public class EditCourseActivity extends AppCompatActivity {
         String courseName = newCourseName.getText().toString();
         Log.i("courseNameLength", Integer.toString(courseName.length()));
         if (courseName.length() == 0) {
-            new uncompleteFieldAlert(this).alert();
+            new errorAlert(this, getResources().getString(R.string.err_course_name)).alert();
             return false;
         }
+        if(!checkTime(startTime, finishTime)) {
+            new errorAlert(this, getResources().getString(R.string.err_time)).alert();
+            return false;
+        }
+        if(!checkTime(testStart, testFinish)){
+            new errorAlert(this, getResources().getString(R.string.err_time)).alert();
+            return false;
+        }
+
         String courseDescS = courseDesc.getText().toString();
         if (courseDescS.length() == 0) courseDescS = null;
-        String learnS = Time.timeJoiner(courseStartH, courseStartM);
-        String learnF = Time.timeJoiner(courseFinishH, courseFinishM);
-        String testS = Time.timeJoiner(testStartH, testStartM);
-        String testF = Time.timeJoiner(testFinishH, testFinishM);
+        String learnS = startTime.getText().toString();
+        String learnF = finishTime.getText().toString();
+        String testS = testStart.getText().toString();
+        String testF = testFinish.getText().toString();
+        String testDay = testDayView.getText().toString();
 
         Log.i(TAG, courseName + "\n" +
                 courseDay + "\n" +
@@ -376,6 +334,28 @@ public class EditCourseActivity extends AppCompatActivity {
         cv.put(dbHelper.COLTESTSTART, testS);
         cv.put(dbHelper.COLTESTFINISH, testF);
         cv.put(dbHelper.COLCOURSEDESC, courseDescS);
+
+        return true;
+    }
+
+    private boolean checkTime(TextView textView1, TextView textView2) {
+        String time = textView1.getText().toString();
+        String h = time.substring(0, 2);
+        if(h.charAt(0) == '0') h = h.substring(1,2);
+        int hour = Integer.parseInt(h);
+        String m = time.substring(3);
+        if(m.charAt(0) == '0') m = m.substring(1,2);
+        int min = Integer.parseInt(m);
+
+        String time2 = textView2.getText().toString();
+        String h2 = time2.substring(0, 2);
+        if(h2.charAt(0) == '0') h2 = h2.substring(1,2);
+        int hour2 = Integer.parseInt(h2);
+        String m2 = time2.substring(3);
+        if(m2.charAt(0) == '0') m2 = m2.substring(1,2);
+        int min2 = Integer.parseInt(m2);
+        //Log.i("Compare Time", ""+hour+" "+hour2+" "+min+" "+min2);
+        if(hour > hour2 || min > min2) return false;
 
         return true;
     }
@@ -404,12 +384,12 @@ public class EditCourseActivity extends AppCompatActivity {
     }
 
     private String printData() {
-        String s = "Adding course "+cv.getAsString(dbHelper.COLCOURSENAME)+"\n"+
-                "learn on "+getResources().getString(weekday.getDayCodeByDayIndex(cv.getAsInteger(dbHelper.COLCOURSEDAY)))+" "+cv.getAsString(dbHelper.COLCOURSESTART)+" - "+cv.getAsString(dbHelper.COLCOURSEFINISH)+"\n"+
-                "test on "+getResources().getString(weekday.getDayCodeByDayIndex(cv.getAsInteger(dbHelper.COLTESTDAY)))+" "+cv.getAsString(dbHelper.COLTESTSTART)+" - "+cv.getAsString(dbHelper.COLTESTFINISH)+"\n";
+        String s = "Adding course :" + cv.getAsString(dbHelper.COLCOURSENAME) + "\n" +
+                "learn on " + getResources().getString(weekday.getDayCodeByDayIndex(cv.getAsInteger(dbHelper.COLCOURSEDAY))) + " " + cv.getAsString(dbHelper.COLCOURSESTART) + " - " + cv.getAsString(dbHelper.COLCOURSEFINISH) + "\n" +
+                "test on " + cv.getAsString(dbHelper.COLTESTDAY) + " " + cv.getAsString(dbHelper.COLTESTSTART) + " - " + cv.getAsString(dbHelper.COLTESTFINISH) + "\n";
         String desc = cv.getAsString(dbHelper.COLCOURSEDESC);
-        if(desc == null) s+="Description : <not set>";
-        else s += "Description : "+desc;
+        if (desc == null) s += "Description : <not set>";
+        else s += "Description : " + desc;
         return s;
     }
 
@@ -417,6 +397,97 @@ public class EditCourseActivity extends AppCompatActivity {
         ArrayList<String> s = new ArrayList<>();
         for (int x : weekday.getArrayWeekDay()) s.add(getResources().getString(x));
         return s;
+    }
+
+    private String getCurTime(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        String curTime = dateFormat.format(mCalendar.getTime());
+        Log.i("myTime", curTime);
+        return curTime;
+    }
+
+    private String getCurMin(){
+        String s = getCurTime();
+        return s.substring(s.indexOf(':')+1);
+    }
+
+    private int getCurMinInt(){
+        return Integer.parseInt(getCurMin());
+    }
+
+    private String getCurHour(){
+        String s = getCurTime();
+        return s.substring(0, s.indexOf(':'));
+    }
+
+    private int getCurHourInt(){
+        return Integer.parseInt(getCurHour());
+    }
+
+    private boolean validDate(String textDate) {
+        errorAlert err = new errorAlert(this, getResources().getString(R.string.err_date));
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        String curDate = dateformat.format(c.getTime());
+        int year = Integer.parseInt(textDate.substring(textDate.indexOf(',')+2));
+        Log.i("valid year", year+" "+Integer.parseInt(curDate.substring(0, 4)));
+        if(year < Integer.parseInt(curDate.substring(0, 4))){
+            err.alert();
+            return false;
+        }
+        String month = textDate.substring(0, textDate.indexOf(' '));
+        int m;
+        switch (month){
+            case "January": m=1;
+                break;
+            case "February": m=2;
+                break;
+            case "March": m=3;
+                break;
+            case "Apirl": m=4;
+                break;
+            case "May": m=5;
+                break;
+            case "June": m=6;
+                break;
+            case "July": m=7;
+                break;
+            case "August": m=8;
+                break;
+            case "September": m=9;
+                break;
+            case "October": m=10;
+                break;
+            case "November": m=11;
+                break;
+            case "December": m=12;
+                break;
+            default: m=-1;
+        }
+        Log.i("valid month", m+" "+Integer.parseInt(curDate.substring(5, 7)));
+        if(m < Integer.parseInt(curDate.substring(5, 7))){
+            err.alert();
+            return false;
+        }
+        String d = textDate.substring(textDate.indexOf(' '), textDate.indexOf(','));
+        int day = -1;
+        for(int i=0;i<d.length();++i){
+            if(d.charAt(i)!= ' ') {
+                day = Integer.parseInt(d.substring(i));
+                break;
+            }
+        }
+        Log.i("valid day", day+" "+Integer.parseInt(curDate.substring(8)));
+        if(day < Integer.parseInt(curDate.substring(8))){
+            err.alert();
+            return false;
+        }
+        return true;
+    }
+
+    private String addZero(int value) {
+        if(value < 10) return "0"+value;
+        else return ""+value;
     }
 
 }

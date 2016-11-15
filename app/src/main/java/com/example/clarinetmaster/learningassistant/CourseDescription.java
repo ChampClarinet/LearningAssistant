@@ -83,7 +83,7 @@ public class CourseDescription extends AppCompatActivity {
                 cursor.getInt(cursor.getColumnIndex(dbHelper.COLCOURSEDAY)),
                 cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSESTART)),
                 cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSEFINISH)),
-                cursor.getInt(cursor.getColumnIndex(dbHelper.COLTESTDAY)),
+                cursor.getString(cursor.getColumnIndex(dbHelper.COLTESTDAY)),
                 cursor.getString(cursor.getColumnIndex(dbHelper.COLTESTSTART)),
                 cursor.getString(cursor.getColumnIndex(dbHelper.COLTESTFINISH)),
                 cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSEDESC))
@@ -151,9 +151,7 @@ public class CourseDescription extends AppCompatActivity {
     }
 
     private void getTestOnLabel(){
-        testTimeData.setText(getResources().getString(weekday.getDayCodeByDayIndex(course.getTestDayIndex()))+" "+
-                course.getTestStart()+" - "+course.getTestFinish()
-        );
+        testTimeData.setText(course.getTestDay());
     }
 
 }

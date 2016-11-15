@@ -42,4 +42,9 @@
     <string name="has_been_deleted">has been deleted.</string>
     <string name="assignment">Assignments</string>
     <string name="courseDesc">Course Description</string>
+    <string name="select_time">Select Time</string>
+    <string name="selectDate">Select Date</string>
+    <string name="err_course_name">Please enter course name.</string>
+    <string name="err_time">Can\'t set start time before finish time.</string>
+    <string name="err_date">Can\'t set date that passed.</string>
 </resources>
