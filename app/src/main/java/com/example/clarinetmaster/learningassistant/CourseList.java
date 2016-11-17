@@ -73,8 +73,10 @@ public class CourseList extends AppCompatActivity {
     private void fecthingData() {
         Cursor cursor = db.query(dbHelper.TBLCOURSE, null, null, null, null, null, dbHelper.COLCOURSENAME);
         courseArrayList.clear();
-        while (cursor.moveToNext()) {
-            courseArrayList.add(new Course(cursor.getInt(cursor.getColumnIndex(dbHelper.COLID)),
+        if(cursor.getCount() == 0) return;
+        while (cursor.moveToNext()){
+            courseArrayList.add(new Course(
+                    cursor.getInt(cursor.getColumnIndex(dbHelper.COLID)),
                     cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSENAME)),
                     cursor.getInt(cursor.getColumnIndex(dbHelper.COLCOURSEDAY)),
                     cursor.getString(cursor.getColumnIndex(dbHelper.COLCOURSESTART)),

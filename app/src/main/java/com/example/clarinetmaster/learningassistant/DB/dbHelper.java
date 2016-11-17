@@ -28,13 +28,6 @@ public class dbHelper extends SQLiteOpenHelper{
     public static final String TBLASSIGNMENT = "ASSIGNMENT";
     public static final String COLID = "_ID";
 
-    public static final String COLAPPOINTLABEL = "APPOINTLABEL";
-    public static final String COLAPPOINTLOCATION = "APPOINTLOCATION";
-    public static final String COLAPPOINTDAY = "APPOINTDAY";
-    public static final String COLAPPOINTSTART = "APPOINTSTART";
-    public static final String COLAPPOINTEND = "APPOINTEND";
-    public static final String COLAPPOINTDESC = "APPOINTDESC";
-
     public static final String COLCOURSENAME = "COURSENAME";
     public static final String COLCOURSEDESC = "COURSEDESC";
     public static final String COLCOURSEDAY = "COURSEDAY";
@@ -43,21 +36,6 @@ public class dbHelper extends SQLiteOpenHelper{
     public static final String COLTESTDAY = "TESTDAY";
     public static final String COLTESTSTART = "TESTSTART";
     public static final String COLTESTFINISH = "TESTFINISH";
-
-    public static final String COLASSIGNMENTNAME = "ASSIGNMENTNAME";
-    public static final String COLASSIGNMENTDESC = "ASSIGNMENTDESC";
-    public static final String COLASSIGNMENTDEADLINE = "ASSIGNMENTDEADLINE";
-    public static final String COLASSIGNMENTOF = "ASSIGNMENTOF";
-
-    private static final String SQL_CREATE_TABLE_APPOINTMENT = "CREATE TABLE "+TBLAPPOINTMENT+" (" +
-            COLID+" INTEGER PRIMARY KEY AUTOINCREMENT," + /**Constraint to create this field every table*/
-            COLAPPOINTLABEL+" TEXT," +
-            COLAPPOINTLOCATION+" TEXT," +
-            COLAPPOINTDAY+" INTEGER,"+
-            COLAPPOINTSTART+" TEXT," +
-            COLAPPOINTEND+" TEXT," +
-            COLAPPOINTDESC+" TEXT" +
-            ")";
 
     private static final String SQL_CREATE_TABLE_COURSE = "CREATE TABLE "+TBLCOURSE+" (" +
             COLID+" INTEGER PRIMARY KEY AUTOINCREMENT," + /**Constraint to create this field every table*/
@@ -71,12 +49,38 @@ public class dbHelper extends SQLiteOpenHelper{
             COLTESTFINISH +" TEXT"+
             ")";
 
+    public static final String COLASSIGNMENTNAME = "ASSIGNMENTNAME";
+    public static final String COLASSIGNMENTDESC = "ASSIGNMENTDESC";
+    public static final String COLASSIGNMENTDEADLINEDATE = "ASSIGNMENTDEADLINEDATE";
+    public static final String COLASSIGNMENTDEADLINEHOUR = "ASSIGNMENTDEADLINEHOUR";
+    public static final String COLASSIGNMENTDEADLINEMIN = "ASSIGNMENTDEADLINEMIN";
+    public static final String COLASSIGNMENTOF = "ASSIGNMENTOF";
+
     private static final String SQL_CREATE_TABLE_ASSIGNMENT = "CREATE TABLE "+TBLASSIGNMENT+" (" +
             COLID+" INTEGER PRIMARY KEY AUTOINCREMENT," + /**Constraint to create this field every table*/
             COLASSIGNMENTNAME+" TEXT," +
-            COLASSIGNMENTDESC+" TEXT," +
-            COLASSIGNMENTDEADLINE+" DATE," +
-            COLASSIGNMENTOF+" INTEGER"+
+            COLASSIGNMENTOF+" INTEGER,"+
+            COLASSIGNMENTDEADLINEDATE +" DATE," +
+            COLASSIGNMENTDEADLINEHOUR +" INTEGER," +
+            COLASSIGNMENTDEADLINEMIN +" INTEGER," +
+            COLASSIGNMENTDESC+" TEXT" +
+            ")";
+
+    public static final String COLAPPOINTLABEL = "APPOINTLABEL";
+    public static final String COLAPPOINTLOCATION = "APPOINTLOCATION";
+    public static final String COLAPPOINTDAY = "APPOINTDAY";
+    public static final String COLAPPOINTSTART = "APPOINTSTART";
+    public static final String COLAPPOINTEND = "APPOINTEND";
+    public static final String COLAPPOINTDESC = "APPOINTDESC";
+
+    private static final String SQL_CREATE_TABLE_APPOINTMENT = "CREATE TABLE "+TBLAPPOINTMENT+" (" +
+            COLID+" INTEGER PRIMARY KEY AUTOINCREMENT," + /**Constraint to create this field every table*/
+            COLAPPOINTLABEL+" TEXT," +
+            COLAPPOINTLOCATION+" TEXT," +
+            COLAPPOINTDAY+" INTEGER,"+
+            COLAPPOINTSTART+" TEXT," +
+            COLAPPOINTEND+" TEXT," +
+            COLAPPOINTDESC+" TEXT" +
             ")";
 
     public dbHelper(Context context){
@@ -93,11 +97,12 @@ public class dbHelper extends SQLiteOpenHelper{
         db.execSQL(SQL_CREATE_TABLE_ASSIGNMENT);
         //db.execSQL(SQL_CREATE_TABLE_APPOINTMENT);
         insertExampleCourse(db);
-        //insertExampleAssignment(db);
+        insertExampleAssignment(db);
     }
 
     private void dropAllTables(SQLiteDatabase db){
         db.execSQL("DROP TABLE " + TBLCOURSE);
+        db.execSQL("DROP TABLE " + TBLASSIGNMENT);
     }
 
     private void insertExampleCourse(SQLiteDatabase db) {
@@ -135,20 +140,21 @@ public class dbHelper extends SQLiteOpenHelper{
         db.insert(TBLCOURSE, null, cv);
     }
 
-    /*private void insertExampleAssignment(SQLiteDatabase db){
+    private void insertExampleAssignment(SQLiteDatabase db){
         ContentValues cv = new ContentValues();
-        cv.put(COLASSIGNMENTNAME, "EX ASSIGN");
-        cv.put(COLASSIGNMENTDESC, "Example Assignment");
         Calendar mCalendar = Calendar.getInstance();
         Date date = mCalendar.getTime();
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.LONG);
         String textDate = dateFormat.format(date);
         Log.i("DateQueryData", textDate);
-        cv.put(COLASSIGNMENTDEADLINE, textDate);
-        cv.put(COLASSIGNMENTOF, 1);
+        cv.put(COLASSIGNMENTNAME, "EX ASSIGN");
+        cv.put(COLASSIGNMENTOF, 2);
+        cv.put(COLASSIGNMENTDEADLINEDATE, textDate);
+        cv.put(COLASSIGNMENTDEADLINEHOUR, 10);
+        cv.put(COLASSIGNMENTDEADLINEMIN, 20);
+        cv.put(COLASSIGNMENTDESC, "Example Assignment");
         db.insert(TBLASSIGNMENT, null, cv);
     }
-*/
     
     public Course selectCourseById(SQLiteDatabase db, int id){
         Cursor c = db.query(TBLCOURSE, null, COLID+" = "+id, null, null, null, null);

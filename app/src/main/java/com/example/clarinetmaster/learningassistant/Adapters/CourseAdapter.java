@@ -37,31 +37,19 @@ public class CourseAdapter extends ArrayAdapter<Course> {
         }
 
         TextView courseName = (TextView) itemLayout.findViewById(R.id.course);
-        TextView learn = (TextView) itemLayout.findViewById(R.id.learn);
-        TextView learntime = (TextView) itemLayout.findViewById(R.id.learntime);
-        TextView test = (TextView) itemLayout.findViewById(R.id.test);
-        TextView testtime = (TextView) itemLayout.findViewById(R.id.testtime);
-        TextView desc = (TextView) itemLayout.findViewById(R.id.desc);
+        TextView courseDay = (TextView) itemLayout.findViewById(R.id.day);
+        TextView courseTime = (TextView) itemLayout.findViewById(R.id.time);
 
         Course course = courseArrayList.get(position);
 
         String cName = course.getCourseName();
         courseName.setText(cName);
 
-        int l = weekday.getDayCodeByDayIndex(course.getCourseDayIndex());
-        learn.setText(l);
+        int cDay = weekday.getDayCodeByDayIndex(course.getCourseDayIndex());
+        courseDay.setText(cDay);
 
-        String lt = course.getLearnStart() + " to " + course.getLearnFinish();
-        learntime.setText(lt);
-
-        String t = course.getTestDay();
-        test.setText(t);
-
-        String tt = course.getTestStart() + " to " + course.getTestFinish();
-        testtime.setText(tt);
-
-        String d = course.getCourseDesc();
-        desc.setText(d);
+        String cTime = course.getLearnStart() + " - " + course.getLearnFinish();
+        courseTime.setText(cTime);
 
         return itemLayout;
     }

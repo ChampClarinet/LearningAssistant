@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.clarinetmaster.learningassistant.DB.dbHelper;
 import com.example.clarinetmaster.learningassistant.Info.errorAlert;
 import com.example.clarinetmaster.learningassistant.Info.weekday;
+import com.example.clarinetmaster.learningassistant.Model.myTime;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
@@ -52,6 +53,11 @@ public class AddCourseActivity extends AppCompatActivity {
     private Calendar mCalendar;
 
     private int courseDay;
+    private myTime curTime;
+    private myTime courseStart;
+    private myTime courseFinish;
+    private myTime testStartTime;
+    private myTime testFinishTime;
 
     private dbHelper mHelper;
     private SQLiteDatabase db;
@@ -83,15 +89,17 @@ public class AddCourseActivity extends AppCompatActivity {
         String textDate = dateFormat.format(date);
         testDayView.setText(textDate);
 
+        curTime = new myTime();
+
         startTime = (TextView) findViewById(R.id.start_time);
-        startTime.setText(getCurTime());
+        startTime.setText(curTime.toString());
         finishTime = (TextView) findViewById(R.id.finish_time);
-        finishTime.setText(getCurTime());
+        finishTime.setText(curTime.toString());
 
         testStart = (TextView) findViewById(R.id.test_start);
-        testStart.setText(getCurTime());
+        testStart.setText(curTime.toString());
         testFinish = (TextView) findViewById(R.id.test_finish);
-        testFinish.setText(getCurTime());
+        testFinish.setText(curTime.toString());
         courseDesc = (EditText) findViewById(R.id.courseDesc);
 
     }
@@ -147,9 +155,10 @@ public class AddCourseActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(RadialPickerLayout radialPickerLayout, int hourOfDay, int minute) {
-                                startTime.setText(addZero(hourOfDay) + ":" + addZero(minute));
+                                courseStart = new myTime(hourOfDay, minute);
+                                startTime.setText(courseStart.toString());
                             }
-                        }, getCurHourInt(), getCurMinInt(), true, false
+                        }, curTime.getHour(), curTime.getMinute(), true, false
                 );
                 timePicker.show(getSupportFragmentManager(), "timePicker");
             }
@@ -162,9 +171,10 @@ public class AddCourseActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-                                finishTime.setText(addZero(hourOfDay) + ":" + addZero(minute));
+                                courseFinish = new myTime(hourOfDay, minute);
+                                finishTime.setText(courseFinish.toString());
                             }
-                        }, getCurHourInt(), getCurMinInt(), true, false
+                        }, curTime.getHour(), curTime.getMinute(), true, false
                 );
                 timePicker.show(getSupportFragmentManager(), "timePicker");
             }
@@ -201,9 +211,10 @@ public class AddCourseActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-                                testStart.setText(addZero(hourOfDay) + ":" + addZero(minute));
+                                testStartTime = new myTime(hourOfDay, minute);
+                                testStart.setText(testStartTime.toString());
                             }
-                        }, getCurHourInt(), getCurMinInt(), true, false
+                        }, curTime.getHour(), curTime.getMinute(), true, false
                 );
                 timePicker.show(getSupportFragmentManager(), "timePicker");
             }
@@ -216,9 +227,10 @@ public class AddCourseActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-                                testFinish.setText(addZero(hourOfDay) + ":" + addZero(minute));
+                                testFinishTime = new myTime(hourOfDay, minute);
+                                testFinish.setText(testFinishTime.toString());
                             }
-                        }, getCurHourInt(), getCurMinInt(), true, false
+                        }, curTime.getHour(), curTime.getMinute(), true, false
                 );
                 timePicker.show(getSupportFragmentManager(), "timePicker");
             }
@@ -245,7 +257,7 @@ public class AddCourseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.course_add_menu, menu);
+        inflater.inflate(R.menu.form_menu, menu);
         return true;
     }
 
@@ -253,7 +265,7 @@ public class AddCourseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_add_course) {
+        if (id == R.id.action_save) {
             Log.i(TAG, "save menu triggered");
             if (encapData()) confirmation();
             return true;
@@ -269,21 +281,15 @@ public class AddCourseActivity extends AppCompatActivity {
             new errorAlert(this, getResources().getString(R.string.err_course_name)).alert();
             return false;
         }
-        if(!checkTime(startTime, finishTime)) {
-            new errorAlert(this, getResources().getString(R.string.err_time)).alert();
-            return false;
-        }
-        if(!checkTime(testStart, testFinish)){
-            new errorAlert(this, getResources().getString(R.string.err_time)).alert();
-            return false;
-        }
+        if(!checkTime(courseStart, courseFinish)) return false;
+        if(!checkTime(testStartTime, testFinishTime)) return  false;
 
         String courseDescS = courseDesc.getText().toString();
         if (courseDescS.length() == 0) courseDescS = null;
-        String learnS = startTime.getText().toString();
-        String learnF = finishTime.getText().toString();
-        String testS = testStart.getText().toString();
-        String testF = testFinish.getText().toString();
+        String learnS = courseStart.toString();
+        String learnF = courseFinish.toString();
+        String testS = testStartTime.toString();
+        String testF = testFinishTime.toString();
         String testDay = testDayView.getText().toString();
 
         Log.i(TAG, courseName + "\n" +
@@ -307,25 +313,11 @@ public class AddCourseActivity extends AppCompatActivity {
         return true;
     }
 
-    private boolean checkTime(TextView textView1, TextView textView2) {
-        String time = textView1.getText().toString();
-        String h = time.substring(0, 2);
-        if(h.charAt(0) == '0') h = h.substring(1,2);
-        int hour = Integer.parseInt(h);
-        String m = time.substring(3);
-        if(m.charAt(0) == '0') m = m.substring(1,2);
-        int min = Integer.parseInt(m);
-
-        String time2 = textView2.getText().toString();
-        String h2 = time2.substring(0, 2);
-        if(h2.charAt(0) == '0') h2 = h2.substring(1,2);
-        int hour2 = Integer.parseInt(h2);
-        String m2 = time2.substring(3);
-        if(m2.charAt(0) == '0') m2 = m2.substring(1,2);
-        int min2 = Integer.parseInt(m2);
-        //Log.i("Compare Time", ""+hour+" "+hour2+" "+min+" "+min2);
-        if(hour > hour2 || min > min2) return false;
-
+    private boolean checkTime(myTime timeStart, myTime timeFinish) {
+        if(timeStart.getHour() > timeFinish.getHour() || timeStart.getMinute() > timeFinish.getMinute()){
+            new errorAlert(this, getResources().getString(R.string.err_time)).alert();
+            return false;
+        }
         return true;
     }
 
@@ -366,31 +358,6 @@ public class AddCourseActivity extends AppCompatActivity {
         ArrayList<String> s = new ArrayList<>();
         for (int x : weekday.getArrayWeekDay()) s.add(getResources().getString(x));
         return s;
-    }
-
-    private String getCurTime(){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        String curTime = dateFormat.format(mCalendar.getTime());
-        Log.i("myTime", curTime);
-        return curTime;
-    }
-
-    private String getCurMin(){
-        String s = getCurTime();
-        return s.substring(s.indexOf(':')+1);
-    }
-
-    private int getCurMinInt(){
-        return Integer.parseInt(getCurMin());
-    }
-
-    private String getCurHour(){
-        String s = getCurTime();
-        return s.substring(0, s.indexOf(':'));
-    }
-
-    private int getCurHourInt(){
-        return Integer.parseInt(getCurHour());
     }
 
     private boolean validDate(String textDate) {
@@ -452,11 +419,6 @@ public class AddCourseActivity extends AppCompatActivity {
             return false;
         }
         return true;
-    }
-
-    private String addZero(int value) {
-        if(value < 10) return "0"+value;
-        else return ""+value;
     }
 
 }

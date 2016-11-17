@@ -5,10 +5,20 @@
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
 
     <string name="feed">Feed</string>
+    <string name="courses">Courses</string>
+    <string name="schedule">Schedule</string>
+    <string name="assignment">Assignments</string>
+    <string name="courseDesc">Course Description</string>
+    <string name="courseEdit">Edit Course</string>
 
-    <string name="courseAdd">Add New Course</string>
-    <string name="courseNameFormHint">Course Name</string>
-    <string name="learntimeFormLabel">Learn on</string>
+    <string name="addButton">ADD</string>
+    <string name="okButton">OK</string>
+    <string name="saveButton">SAVE</string>
+    <string name="yesButton">YES</string>
+    <string name="backButton">BACK</string>
+
+    <string name="menu_edit">Edit</string>
+    <string name="menu_delete">Delete</string>
 
     <string name="sun">Sunday</string>
     <string name="mon">Monday</string>
@@ -17,34 +27,38 @@
     <string name="thu">Thursday</string>
     <string name="fri">Friday</string>
     <string name="sat">Saturday</string>
-    <string name="TesttimeFormLabel">Testtime</string>
-    <string name="add">ADD</string>
-    <string name="description">add a description</string>
+
     <string name="error" translatable="false">Error</string>
     <string name="errMessage" translatable="false">Please complete the form.</string>
-    <string name="okButton">OK</string>
+
+    <string name="courseAdd">Add New Course</string>
+    <string name="courseNameFormHint">Course Name</string>
+    <string name="learntimeFormLabel">Learn on</string>
+    <string name="TesttimeFormLabel">Testtime</string>
     <string name="from">from</string>
     <string name="to">to</string>
-    <string name="day">Day</string>
-    <string name="saveButton">SAVE</string>
+
+    <string name="assignmentNameFormHint">Assignment Title</string>
+    <string name="deadlinelabel">Submitation Date</string>
+    <string name="deadlinelabel2">Submitation Time</string>
+
+    <string name="description">add a description</string>
+
     <string name="confirm">Confirmation</string>
     <string name="conMessage">Please check your details</string>
-    <string name="yesButton">YES</string>
-    <string name="backButton">BACK</string>
-    <string name="courses">Courses</string>
-    <string name="schedule">Schedule</string>
-    <string name="menu_edit">Edit</string>
-    <string name="menu_delete">Delete</string>
+
     <string name="delete_confirm">Are you sure to delete</string>
-    <string name="courseEdit">Edit Course</string>
+
     <string name="added">added.</string>
     <string name="updated">updated.</string>
     <string name="has_been_deleted">has been deleted.</string>
-    <string name="assignment">Assignments</string>
-    <string name="courseDesc">Course Description</string>
+
+
     <string name="select_time">Select Time</string>
     <string name="selectDate">Select Date</string>
+
     <string name="err_course_name">Please enter course name.</string>
     <string name="err_time">Can\'t set start time before finish time.</string>
     <string name="err_date">Can\'t set date that passed.</string>
+
 </resources>

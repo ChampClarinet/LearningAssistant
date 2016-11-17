@@ -32,7 +32,7 @@
             android:name=".EditCourseActivity"
             android:label="@string/courseEdit" />
         <activity android:name=".CourseDescription" />
-        <activity android:name=".addAssignment"></activity>
+        <activity android:name=".AddAssignmentActivity"></activity>
     </application>
 
 </manifest>

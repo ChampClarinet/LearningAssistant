@@ -8,6 +8,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -17,11 +19,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.clarinetmaster.learningassistant.Adapters.AssignmentCardAdapter;
 import com.example.clarinetmaster.learningassistant.DB.dbHelper;
 import com.example.clarinetmaster.learningassistant.Info.weekday;
+import com.example.clarinetmaster.learningassistant.Model.Assignment;
 import com.example.clarinetmaster.learningassistant.Model.Course;
 
-public class CourseDescription extends AppCompatActivity {
+import java.util.ArrayList;
+
+public class CourseDescription extends AppCompatActivity{
 
     private static final String TAG = "CourseDescription";
     private Course course;
@@ -29,9 +35,14 @@ public class CourseDescription extends AppCompatActivity {
     private TextView testTimeData;
     private TextView courseDesc;
     private TextView courseDescLabel;
+    private RecyclerView assignmentRV;
 
     private dbHelper mHelper;
     private SQLiteDatabase db;
+
+    private AssignmentCardAdapter adapter;
+
+    private ArrayList<Assignment> assignments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +50,7 @@ public class CourseDescription extends AppCompatActivity {
         setContentView(R.layout.activity_course_description);
 
         course = (Course) getIntent().getSerializableExtra("Course");
+        Log.i("courseID", ""+course.getId());
 
         getSupportActionBar().setTitle(course.getCourseName());
 
@@ -63,11 +75,48 @@ public class CourseDescription extends AppCompatActivity {
         courseDesc.setText(course.getCourseDesc());
         courseDescLabel.setText(getResources().getString(R.string.courseDesc)+" :");
 
+        assignmentRV = (RecyclerView) findViewById(R.id.assignmentRV);
+        assignmentRV.setHasFixedSize(true);
+
+        assignmentRV.setLayoutManager(new LinearLayoutManager(this));
+
+        assignments = new ArrayList<>();
+
+        adapter = new AssignmentCardAdapter(this, assignments);
+        assignmentRV.setAdapter(adapter);
+
+    }
+
+    private void fetchData() {
+        Cursor cursor = db.query(dbHelper.TBLASSIGNMENT, null, dbHelper.COLASSIGNMENTOF + " = " + course.getId(), null, null, null,
+                dbHelper.COLASSIGNMENTDEADLINEDATE + ", " + dbHelper.COLASSIGNMENTDEADLINEHOUR + ", " + dbHelper.COLASSIGNMENTDEADLINEMIN);
+
+        assignments.clear();
+
+        if(cursor.getCount() == 0){
+            Log.i(TAG, "not found");
+            return;
+        }
+
+        Log.i(TAG, "Fetching "+cursor.getCount()+" data");
+
+        while(cursor.moveToNext()){
+            Assignment a = new Assignment(
+                    cursor.getString(cursor.getColumnIndex(dbHelper.COLASSIGNMENTNAME)),
+                    cursor.getInt(cursor.getColumnIndex(dbHelper.COLASSIGNMENTOF)),
+                    cursor.getString(cursor.getColumnIndex(dbHelper.COLASSIGNMENTDEADLINEDATE)),
+                    cursor.getInt(cursor.getColumnIndex(dbHelper.COLASSIGNMENTDEADLINEHOUR)),
+                    cursor.getInt(cursor.getColumnIndex(dbHelper.COLASSIGNMENTDEADLINEMIN)),
+                    cursor.getString(cursor.getColumnIndex(dbHelper.COLASSIGNMENTDESC))
+            );
+            assignments.add(a);
+        }
+
     }
 
     private void addAssignment() {
-        Intent intent = new Intent(this, addAssignment.class);
-        intent.putExtra("assignOf", course.getId());
+        Intent intent = new Intent(this, AddAssignmentActivity.class);
+        intent.putExtra("courseID", course.getId());
         startActivity(intent);
     }
 
@@ -91,6 +140,8 @@ public class CourseDescription extends AppCompatActivity {
 
         getTestOnLabel();
         getLearnOnLabel();
+
+        fetchData();
 
     }
 
